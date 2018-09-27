@@ -196,43 +196,43 @@ testEnvironment()
     # checkpoint environment before
     writeModuleList ${tmp}.log loaded "BEFORE C++ MODULES" ${tmp}.mod.before
 
-    # change environments a couple of times
-    for i in `seq 2` ; do
-
-        echo ">>>>>>>>>>>>>>> test C++ environment setup"
-
-        # check C++ env
-        setCppEnvironment
-        writeModuleList ${tmp}.log loaded "C++ MODULES" ${tmp}.mod.dycore
-        if [ -z ${old_prgenv+x} ] ; then exitError 8001 ${LINENO} "variable old_prgenv is not set" ; fi
-        if [ -z ${dycore_gpp+x} ] ; then exitError 8002 ${LINENO} "variable dycore_gpp is not set" ; fi
-        if [ -z ${dycore_gcc+x} ] ; then exitError 8003 ${LINENO} "variable dycore_gcc is not set" ; fi
-        if [ -z ${cuda_gpp+x} ] ; then exitError 8004 ${LINENO} "variable cuda_gpp is not set" ; fi
-        if [ -z ${BOOST_PATH+x} ] ; then exitError 8005 ${LINENO} "variable BOOST_PATH is not set" ; fi
-
-        # check cleanup of C++ env
-        unsetCppEnvironment
-        writeModuleList ${tmp}.log loaded "BETWEEN MODULES" ${tmp}.mod.between
-        if [ ! -z ${old_prgenv+x} ] ; then exitError 8101 ${LINENO} "variable old_prgenv is still set" ; fi
-        if [ ! -z ${dycore_gpp+x} ] ; then exitError 8102 ${LINENO} "variable dycore_gpp is still set" ; fi
-        if [ ! -z ${dycore_gcc+x} ] ; then exitError 8103 ${LINENO} "variable dycore_gcc is still set" ; fi
-        if [ ! -z ${cuda_gpp+x} ] ; then exitError 8104 ${LINENO} "variable cuda_gpp is still set" ; fi
-        compareFiles ${tmp}.mod.before ${tmp}.mod.between
-
-        echo ">>>>>>>>>>>>>>> test Fortran environment setup"
-
-        # check Fortran env
-        setFortranEnvironment
-        writeModuleList ${tmp}.log loaded "FORTRAN MODULES" ${tmp}.mod.fortran
-        if [ -z ${old_prgenv+x} ] ; then exitError 8201 ${LINENO} "variable old_prgenv is not set" ; fi
-
-        # check cleanup of Fortran env
-        unsetFortranEnvironment
-        writeModuleList ${tmp}.log loaded "AFTER FORTRAN MODULES" ${tmp}.mod.after
-        if [ ! -z ${old_prgenv+x} ] ; then exitError 8301 ${LINENO} "variable old_prgenv is still set" ; fi
-        compareFiles ${tmp}.mod.before ${tmp}.mod.after
-
-    done
+#    # change environments a couple of times
+#    for i in `seq 2` ; do
+#
+#        echo ">>>>>>>>>>>>>>> test C++ environment setup"
+#
+#        # check C++ env
+#        setCppEnvironment
+#        writeModuleList ${tmp}.log loaded "C++ MODULES" ${tmp}.mod.dycore
+#        if [ -z ${old_prgenv+x} ] ; then exitError 8001 ${LINENO} "variable old_prgenv is not set" ; fi
+#        if [ -z ${dycore_gpp+x} ] ; then exitError 8002 ${LINENO} "variable dycore_gpp is not set" ; fi
+#        if [ -z ${dycore_gcc+x} ] ; then exitError 8003 ${LINENO} "variable dycore_gcc is not set" ; fi
+#        if [ -z ${cuda_gpp+x} ] ; then exitError 8004 ${LINENO} "variable cuda_gpp is not set" ; fi
+#        if [ -z ${BOOST_PATH+x} ] ; then exitError 8005 ${LINENO} "variable BOOST_PATH is not set" ; fi
+#
+#        # check cleanup of C++ env
+#        unsetCppEnvironment
+#        writeModuleList ${tmp}.log loaded "BETWEEN MODULES" ${tmp}.mod.between
+#        if [ ! -z ${old_prgenv+x} ] ; then exitError 8101 ${LINENO} "variable old_prgenv is still set" ; fi
+#        if [ ! -z ${dycore_gpp+x} ] ; then exitError 8102 ${LINENO} "variable dycore_gpp is still set" ; fi
+#        if [ ! -z ${dycore_gcc+x} ] ; then exitError 8103 ${LINENO} "variable dycore_gcc is still set" ; fi
+#        if [ ! -z ${cuda_gpp+x} ] ; then exitError 8104 ${LINENO} "variable cuda_gpp is still set" ; fi
+#        compareFiles ${tmp}.mod.before ${tmp}.mod.between
+#
+#        echo ">>>>>>>>>>>>>>> test Fortran environment setup"
+#
+#        # check Fortran env
+#        setFortranEnvironment
+#        writeModuleList ${tmp}.log loaded "FORTRAN MODULES" ${tmp}.mod.fortran
+#        if [ -z ${old_prgenv+x} ] ; then exitError 8201 ${LINENO} "variable old_prgenv is not set" ; fi
+#
+#        # check cleanup of Fortran env
+#        unsetFortranEnvironment
+#        writeModuleList ${tmp}.log loaded "AFTER FORTRAN MODULES" ${tmp}.mod.after
+#        if [ ! -z ${old_prgenv+x} ] ; then exitError 8301 ${LINENO} "variable old_prgenv is still set" ; fi
+#        compareFiles ${tmp}.mod.before ${tmp}.mod.after
+#
+#    done
 
     # everything ok
     echo ">>>>>>>>>>>>>>>   success"

@@ -110,38 +110,38 @@ get_fcompiler_cmd()
 #
 setCppEnvironment()
 {
-    createModuleCheckPoint
-
-    old_prgenv=`module list -t 2>&1 | grep 'PrgEnv-'`
-
-    case "${compiler}" in
-    gnu )
-        # Do nothing
-        ;;
-    * )
-        echo "Note : ${compiler} is not supported on kesch for c++ compilation, forcing gnu"
-        ;;
-    esac
-
-    export ENVIRONMENT_TEMPFILE=$(mktemp)
-    cat > $ENVIRONMENT_TEMPFILE <<- EOF
-        # Generated with the build script
-        # implicit module purge
-        module purge
-        module load craype-network-infiniband
-        module load craype-haswell
-        module load craype-accel-nvidia35
-        module load cray-libsci
-        module load cudatoolkit/8.0.61
-        module load mvapich2gdr_gnu/2.2_cuda_8.0
-        #XL: HACK needed with this mvapich2 for the dycore test, removed once fixed
-        export LD_PRELOAD=/opt/mvapich2/gdr/no-mcast/2.2/cuda8.0/mpirun/gnu4.8.5/lib64/libmpi.so
-        module load gcc/5.4.0-2.26
-        module load cmake/3.9.1
-EOF
-   
-    module purge
-    source $ENVIRONMENT_TEMPFILE
+#    createModuleCheckPoint
+#
+#    old_prgenv=`module list -t 2>&1 | grep 'PrgEnv-'`
+#
+#    case "${compiler}" in
+#    gnu )
+#        # Do nothing
+#        ;;
+#    * )
+#        echo "Note : ${compiler} is not supported on kesch for c++ compilation, forcing gnu"
+#        ;;
+#    esac
+#
+#    export ENVIRONMENT_TEMPFILE=$(mktemp)
+#    cat > $ENVIRONMENT_TEMPFILE <<- EOF
+#        # Generated with the build script
+#        # implicit module purge
+#        module purge
+#        module load craype-network-infiniband
+#        module load craype-haswell
+#        module load craype-accel-nvidia35
+#        module load cray-libsci
+#        module load cudatoolkit/8.0.61
+#        module load mvapich2gdr_gnu/2.2_cuda_8.0
+#        #XL: HACK needed with this mvapich2 for the dycore test, removed once fixed
+#        export LD_PRELOAD=/opt/mvapich2/gdr/no-mcast/2.2/cuda8.0/mpirun/gnu4.8.5/lib64/libmpi.so
+#        module load gcc/5.4.0-2.26
+#        module load cmake/3.9.1
+#EOF
+#   
+#    module purge
+#    source $ENVIRONMENT_TEMPFILE
     dycore_gpp='g++'
     dycore_gcc='gcc'
     cuda_gpp='g++'
@@ -173,10 +173,10 @@ unsetCppEnvironment()
 {
     #XL: HACK, unset LD_PRELOAD
     unset LD_PRELOAD
-    restoreModuleCheckPoint
+#    restoreModuleCheckPoint
     
-    rm $ENVIRONMENT_TEMPFILE
-    unset ENVIRONMENT_TEMPFILE
+#    rm $ENVIRONMENT_TEMPFILE
+#    unset ENVIRONMENT_TEMPFILE
 
     unset dycore_openmp
     unset dycore_gpp
@@ -204,75 +204,75 @@ unsetCppEnvironment()
 #
 setFortranEnvironment()
 {
-    createModuleCheckPoint
-
-    old_prgenv=`module list -t 2>&1 | grep 'PrgEnv-'`
-
-    export ENVIRONMENT_TEMPFILE=$(mktemp)
+#    createModuleCheckPoint
+#
+#    old_prgenv=`module list -t 2>&1 | grep 'PrgEnv-'`
+#
+#    export ENVIRONMENT_TEMPFILE=$(mktemp)
+#    
+#    case "${compiler}" in
+#    cray )
+#        # Provided by CSCS
+#        cat > $ENVIRONMENT_TEMPFILE <<-EOF
+#            # Generated with the build script
+#            # implicit module purge
+#            module load craype-haswell
+#            module load craype-accel-nvidia35
+#            module load craype-network-infiniband
+#            module load netCDF-Fortran/4.4.4-CrayCCE-17.06
+#            module switch mvapich2_cce/2.2rc1.0.3_cuda80 mvapich2gdr_gnu/2.2_cuda_8.0
+#            module load gcc/5.4.0-2.26
+#            module load cmake/3.9.1
+#EOF
+#
+#        if [ "${target}" == "cpu" ]; then
+#            cat > $ENVIRONMENT_TEMPFILE <<-EOF
+#                # Generated with the build script
+#                # implicit module purge
+#                module load craype-haswell
+#                module load craype-accel-nvidia35
+#                module load craype-network-infiniband
+#                module load netCDF-Fortran/4.4.4-CrayCCE-17.06
+#                module switch mvapich2_cce/2.2rc1.0.3_cuda80 mvapich2_cce/2.2rc1.0.3
+#                module load gcc/5.4.0-2.26
+#                module load cmake/3.9.1
+#EOF
+#        fi
+#        export FC="ftn -D__CRAY_FORTRAN__"
+#        ;;
+#    gnu )
+#        cat > $ENVIRONMENT_TEMPFILE <<-EOF
+#            # Generated with the build script
+#            # implicit module purge
+#            module load craype-haswell
+#            module load craype-network-infiniband
+#            module load PrgEnv-gnu/17.02
+#            module load cmake/3.9.1
+#            module load netcdf-fortran/4.4.4-gmvolf-17.02
+#            module load hdf5/1.8.18-gmvolf-17.02
+#EOF
+#        export FC=gfortran
+#        ;;
+#    pgi ) 
+#        cat > $ENVIRONMENT_TEMPFILE <<-EOF
+#            # Generated with the build script
+#            # implicit module purge
+#            module load craype-haswell
+#            module load PrgEnv-pgi/17.10
+#            module unload openmpi/2.1.2/2017
+#            module load mvapich2gdr_gnu/2.3a_cuda_8.0_pgi17.10
+#            module load gcc/5.4.0-2.26
+#            module load cmake/3.9.1
+#EOF
+#        export FC=mpif90
+#        ;;	
+#    * )
+#        echo "ERROR: ${compiler} Unsupported compiler encountered in setFortranEnvironment" 1>&2
+#        exit 1
+#    esac
     
-    case "${compiler}" in
-    cray )
-        # Provided by CSCS
-        cat > $ENVIRONMENT_TEMPFILE <<-EOF
-            # Generated with the build script
-            # implicit module purge
-            module load craype-haswell
-            module load craype-accel-nvidia35
-            module load craype-network-infiniband
-            module load netCDF-Fortran/4.4.4-CrayCCE-17.06
-            module switch mvapich2_cce/2.2rc1.0.3_cuda80 mvapich2gdr_gnu/2.2_cuda_8.0
-            module load gcc/5.4.0-2.26
-            module load cmake/3.9.1
-EOF
-
-        if [ "${target}" == "cpu" ]; then
-            cat > $ENVIRONMENT_TEMPFILE <<-EOF
-                # Generated with the build script
-                # implicit module purge
-                module load craype-haswell
-                module load craype-accel-nvidia35
-                module load craype-network-infiniband
-                module load netCDF-Fortran/4.4.4-CrayCCE-17.06
-                module switch mvapich2_cce/2.2rc1.0.3_cuda80 mvapich2_cce/2.2rc1.0.3
-                module load gcc/5.4.0-2.26
-                module load cmake/3.9.1
-EOF
-        fi
-        export FC="ftn -D__CRAY_FORTRAN__"
-        ;;
-    gnu )
-        cat > $ENVIRONMENT_TEMPFILE <<-EOF
-            # Generated with the build script
-            # implicit module purge
-            module load craype-haswell
-            module load craype-network-infiniband
-            module load PrgEnv-gnu/17.02
-            module load cmake/3.9.1
-            module load netcdf-fortran/4.4.4-gmvolf-17.02
-            module load hdf5/1.8.18-gmvolf-17.02
-EOF
-        export FC=gfortran
-        ;;
-    pgi ) 
-        cat > $ENVIRONMENT_TEMPFILE <<-EOF
-            # Generated with the build script
-            # implicit module purge
-            module load craype-haswell
-            module load PrgEnv-pgi/17.10
-            module unload openmpi/2.1.2/2017
-            module load mvapich2gdr_gnu/2.3a_cuda_8.0_pgi17.10
-            module load gcc/5.4.0-2.26
-            module load cmake/3.9.1
-EOF
-        export FC=mpif90
-        ;;	
-    * )
-        echo "ERROR: ${compiler} Unsupported compiler encountered in setFortranEnvironment" 1>&2
-        exit 1
-    esac
-    
-    module purge
-    source $ENVIRONMENT_TEMPFILE
+#    module purge
+#    source $ENVIRONMENT_TEMPFILE
     
     # Add an explicit linker line for GCC 4.9.3 library to provide C++11 support
     export LDFLAGS="-L$EBROOTGCC/lib64 ${LDFLAGS}"
@@ -308,10 +308,10 @@ EOF
 #
 unsetFortranEnvironment()
 {
-    restoreModuleCheckPoint
+#    restoreModuleCheckPoint
 
-    rm $ENVIRONMENT_TEMPFILE
-    unset ENVIRONMENT_TEMPFILE
+#    rm $ENVIRONMENT_TEMPFILE
+#    unset ENVIRONMENT_TEMPFILE
 
     unset old_prgenv
 
